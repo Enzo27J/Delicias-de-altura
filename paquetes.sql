@@ -315,3 +315,104 @@ CREATE OR REPLACE PACKAGE BODY PKG_FACTURAS AS
     END;
 END PKG_FACTURAS;
 /
+
+/* ===========================================================
+   PAQUETE: REPORTES
+   Generación de informes de ventas, pedidos e inventario
+=========================================================== */
+CREATE OR REPLACE PACKAGE PKG_REPORTES AS
+    PROCEDURE PA_REPORTE_VENTAS(p_fecha_inicio IN DATE, p_fecha_fin IN DATE, p_cursor OUT SYS_REFCURSOR);
+    PROCEDURE PA_REPORTE_PEDIDOS(p_fecha_inicio IN DATE, p_fecha_fin IN DATE, p_cursor OUT SYS_REFCURSOR);
+    PROCEDURE PA_REPORTE_INVENTARIO(p_cursor OUT SYS_REFCURSOR);
+END PKG_REPORTES;
+/
+CREATE OR REPLACE PACKAGE BODY PKG_REPORTES AS
+    PROCEDURE PA_REPORTE_VENTAS(p_fecha_inicio IN DATE, p_fecha_fin IN DATE, p_cursor OUT SYS_REFCURSOR) IS
+    BEGIN
+        OPEN p_cursor FOR
+            SELECT F.id_factura,
+                   F.fecha_emision,
+                   F.monto_total,
+                   C.nombre AS cliente,
+                   P.id_pedido
+              FROM Facturas F
+              JOIN Pedidos P ON F.id_pedido = P.id_pedido
+              JOIN Clientes C ON P.id_cliente = C.id_cliente
+             WHERE F.fecha_emision BETWEEN p_fecha_inicio AND p_fecha_fin
+             ORDER BY F.fecha_emision;
+    END;
+
+    PROCEDURE PA_REPORTE_PEDIDOS(p_fecha_inicio IN DATE, p_fecha_fin IN DATE, p_cursor OUT SYS_REFCURSOR) IS
+    BEGIN
+        OPEN p_cursor FOR
+            SELECT P.id_pedido,
+                   C.nombre AS cliente,
+                   P.fecha,
+                   P.total,
+                   P.estado
+              FROM Pedidos P
+              JOIN Clientes C ON P.id_cliente = C.id_cliente
+             WHERE P.fecha BETWEEN p_fecha_inicio AND p_fecha_fin
+             ORDER BY P.fecha;
+    END;
+
+    PROCEDURE PA_REPORTE_INVENTARIO(p_cursor OUT SYS_REFCURSOR) IS
+    BEGIN
+        OPEN p_cursor FOR
+            SELECT PR.id_producto,
+                   PR.nombre,
+                   PR.categoria,
+                   PR.stock,
+                   PR.precio_compra,
+                   PROV.nombre AS proveedor
+              FROM Productos PR
+              JOIN Proveedores PROV ON PR.id_proveedor = PROV.id_proveedor
+             ORDER BY PR.nombre;
+    END;
+END PKG_REPORTES;
+/
+
+/* ===========================================================
+   PAQUETE: UTILIDADES
+   Funciones y procedimientos auxiliares
+=========================================================== */
+CREATE OR REPLACE PACKAGE PKG_UTILIDADES AS
+    FUNCTION PA_CALCULAR_TOTAL_PEDIDO(p_id_pedido IN NUMBER) RETURN NUMBER;
+    PROCEDURE PA_ACTUALIZAR_TOTAL_PEDIDO(p_id_pedido IN NUMBER);
+    FUNCTION PA_OBTENER_STOCK_PRODUCTO(p_id_producto IN NUMBER) RETURN NUMBER;
+END PKG_UTILIDADES;
+/
+CREATE OR REPLACE PACKAGE BODY PKG_UTILIDADES AS
+    FUNCTION PA_CALCULAR_TOTAL_PEDIDO(p_id_pedido IN NUMBER) RETURN NUMBER IS
+        v_total NUMBER := 0;
+    BEGIN
+        SELECT NVL(SUM(subtotal),0)
+        INTO v_total
+        FROM Detalle_Pedido
+        WHERE id_pedido = p_id_pedido;
+        RETURN v_total;
+    END;
+
+    PROCEDURE PA_ACTUALIZAR_TOTAL_PEDIDO(p_id_pedido IN NUMBER) IS
+        v_total NUMBER;
+    BEGIN
+        v_total := PA_CALCULAR_TOTAL_PEDIDO(p_id_pedido);
+        UPDATE Pedidos
+        SET total = v_total
+        WHERE id_pedido = p_id_pedido;
+        COMMIT;
+    END;
+
+    FUNCTION PA_OBTENER_STOCK_PRODUCTO(p_id_producto IN NUMBER) RETURN NUMBER IS
+        v_stock NUMBER;
+    BEGIN
+        SELECT stock INTO v_stock
+        FROM Productos
+        WHERE id_producto = p_id_producto;
+        RETURN v_stock;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RETURN 0;
+    END;
+END PKG_UTILIDADES;
+/
