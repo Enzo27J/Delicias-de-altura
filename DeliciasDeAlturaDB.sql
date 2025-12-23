@@ -153,9 +153,8 @@ END$$
 
 DELIMITER ;
 
-------------------------------------------------------------------------------------
 -- Ahora nos vamos a ayudar una vista para las ventas. Procedemos con la creación --
-------------------------------------------------------------------------------------
+
 CREATE VIEW vista_ventas AS
 SELECT f.id_factura, c.nombre AS cliente, f.total, f.fecha
 FROM facturas f
