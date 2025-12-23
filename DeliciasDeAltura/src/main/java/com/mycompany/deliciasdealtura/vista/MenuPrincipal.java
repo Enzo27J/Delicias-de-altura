@@ -1,3 +1,5 @@
+// Descripción: Form del menú principal
+
 package com.mycompany.deliciasdealtura.vista;
 
 import javax.swing.*;

@@ -1,3 +1,5 @@
+//Descripción: Clase para los platos
+
 package com.mycompany.deliciasdealtura.modelo;
 
 public class PlatoItem {

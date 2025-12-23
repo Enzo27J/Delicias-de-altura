@@ -1,3 +1,5 @@
+// Descripción: Form que recibe el nombre del cliente junto con el nombre del platillo para agregar un pedidido nuevo
+
 package com.mycompany.deliciasdealtura.vista;
 
 import com.mycompany.deliciasdealtura.conexion.Conexion;
@@ -26,7 +28,7 @@ public class FormPedido extends javax.swing.JFrame {
         lblTitulo.setBounds(110, 20, 200, 30);
         add(lblTitulo);
 
-        // CLIENTE
+        // Cliente
         JLabel lblCliente = new JLabel("Cliente:");
         lblCliente.setBounds(50, 70, 100, 25);
         add(lblCliente);
@@ -35,7 +37,7 @@ public class FormPedido extends javax.swing.JFrame {
         comboCliente.setBounds(150, 70, 200, 25);
         add(comboCliente);
 
-        // PLATO
+        // Plato
         JLabel lblPlato = new JLabel("Plato:");
         lblPlato.setBounds(50, 110, 100, 25);
         add(lblPlato);
@@ -44,7 +46,7 @@ public class FormPedido extends javax.swing.JFrame {
         comboPlato.setBounds(150, 110, 200, 25);
         add(comboPlato);
 
-        // CANTIDAD
+        // Cantidad
         JLabel lblCantidad = new JLabel("Cantidad:");
         lblCantidad.setBounds(50, 150, 100, 25);
         add(lblCantidad);
@@ -53,7 +55,7 @@ public class FormPedido extends javax.swing.JFrame {
         txtCantidad.setBounds(150, 150, 200, 25);
         add(txtCantidad);
 
-        // BOTÓN
+        // Botón
         JButton btnConfirmar = new JButton("Confirmar Pedido");
         btnConfirmar.setBounds(120, 210, 180, 40);
         Estilos.botonPrincipal(btnConfirmar);
@@ -66,9 +68,7 @@ public class FormPedido extends javax.swing.JFrame {
         cargarPlatos();
     }
 
-    // =======================
-    // CARGAR CLIENTES
-    // =======================
+    // Cargamos los clientes
     private void cargarClientes() {
         String sql = "SELECT id_cliente, nombre FROM clientes";
 
@@ -93,9 +93,7 @@ public class FormPedido extends javax.swing.JFrame {
         }
     }
 
-    // =======================
-    // CARGAR PLATOS
-    // =======================
+    // Cargamos los platos
     private void cargarPlatos() {
         String sql = "SELECT id_plato, nombre FROM platos";
 
@@ -120,9 +118,7 @@ public class FormPedido extends javax.swing.JFrame {
         }
     }
 
-    // =======================
-    // REGISTRAR PEDIDO
-    // =======================
+    // Finalmente, registramos los pedidos
     private void registrarPedido() {
 
         try {
@@ -145,12 +141,12 @@ public class FormPedido extends javax.swing.JFrame {
 
             cs.execute();
 
-            JOptionPane.showMessageDialog(this, "✅ Pedido registrado correctamente");
+            JOptionPane.showMessageDialog(this, "Pedido registrado correctamente");
 
             txtCantidad.setText("");
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "❌ Error: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             ex.printStackTrace();
         }
     }

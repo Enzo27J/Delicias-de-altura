@@ -1,3 +1,5 @@
+//Descripción: Clase para los clientes
+
 package com.mycompany.deliciasdealtura.modelo;
 
 public class ClienteItem {

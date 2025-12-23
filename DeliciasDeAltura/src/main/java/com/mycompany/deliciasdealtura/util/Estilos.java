@@ -1,3 +1,5 @@
+//Descripción: Esta clase permite agregar un estilo a los botones más esterilizado
+
 package com.mycompany.deliciasdealtura.util;
 
 import javax.swing.JButton;
