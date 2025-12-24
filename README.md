@@ -4,14 +4,10 @@
 **Universidad:** Fidélitas  
 **Autores:** Enzo Morales & Andrey Rodríguez  
 
----
-
 ## Descripción del Proyecto
 Este proyecto consiste en el desarrollo de una aplicación de escritorio en Java conectada a una base de datos MySQL, cuyo objetivo es optimizar la administración y la toma de decisiones de un restaurante hipotético llamado “Delicias de Altura”.
 
 El sistema permite gestionar información clave como clientes, productos, platos del menú, pedidos, facturación y reportes de ventas, aplicando conceptos fundamentales de bases de datos.
-
----
 
 ## Objetivos
 - Administrar información mediante operaciones CRUD
@@ -20,8 +16,6 @@ El sistema permite gestionar información clave como clientes, productos, platos
 - Generar facturas de forma automática
 - Actualizar inventarios mediante triggers
 - Consultar reportes de ventas usando vistas
-
----
 
 ## Tecnologías Utilizadas
 - **Java SE** (JDK)
@@ -32,4 +26,21 @@ El sistema permite gestionar información clave como clientes, productos, platos
 - **Maven**
 - **MySQL Connector/J**
 
----
+## Instrucciones de Ejecución
+
+### Requisitos
+- JDK 17 o superior
+- Apache NetBeans (con Maven)
+- MySQL Server 8.0
+- MySQL Workbench 8.0
+
+### Pasos
+1. Ejecutar el script SQL para crear la base de datos `delicias_altura`. Se pueden ejercutar los demás, pero solo es necesario ejecutar "tablas.sql".
+2. Configurar usuario y contraseña en la clase `Conexion.java`
+3. Abrir el proyecto en NetBeans
+4. Ejecutar el proyecto
+
+### Notas
+- La lógica principal se maneja en MySQL (procedimientos, funciones, triggers y vistas)
+- Java se utiliza como interfaz gráfica
+- El reporte de ventas se obtiene desde la vista `vista_ventas`
