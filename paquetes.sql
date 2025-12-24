@@ -1,418 +1,295 @@
 /* ===========================================================
-   PAQUETES PL/SQL - PROYECTO: "DELICIAS DE ALTURA"
-   Autores: Enzo Morales y Andrey Rodríguez
-   Descripción: Encapsulación de procedimientos CRUD por entidad
+    PAQUETES PL/SQL - PROYECTO: "DELICIAS DE ALTURA"
+    Autores: Enzo Morales y Andrey Rodríguez
+    Descripción: Encapsulación de procedimientos CRUD por entidad
 =========================================================== */
 
 /* ===========================================================
-   PAQUETE: PROVEEDORES
+    PAQUETE: PROVEEDORES
 =========================================================== */
-CREATE OR REPLACE PACKAGE PKG_PROVEEDORES AS
-    PROCEDURE PA_CREAR_PROVEEDOR(p_nombre IN VARCHAR2, p_telefono IN VARCHAR2, p_direccion IN VARCHAR2);
-    PROCEDURE PA_LEER_PROVEEDOR_ID(p_id_proveedor IN NUMBER, p_cursor OUT SYS_REFCURSOR);
-    PROCEDURE PA_ACTUALIZAR_PROVEEDOR(p_id_proveedor IN NUMBER, p_nombre IN VARCHAR2, p_telefono IN VARCHAR2, p_direccion IN VARCHAR2);
-    PROCEDURE PA_ELIMINAR_PROVEEDOR(p_id_proveedor IN NUMBER);
-END PKG_PROVEEDORES;
-/
-CREATE OR REPLACE PACKAGE BODY PKG_PROVEEDORES AS
-    PROCEDURE PA_CREAR_PROVEEDOR(p_nombre IN VARCHAR2, p_telefono IN VARCHAR2, p_direccion IN VARCHAR2) IS
-    BEGIN
-        INSERT INTO Proveedores(nombre, telefono, direccion)
-        VALUES(p_nombre, p_telefono, p_direccion);
-        COMMIT;
-    END;
+DELIMITER //
 
-    PROCEDURE PA_LEER_PROVEEDOR_ID(p_id_proveedor IN NUMBER, p_cursor OUT SYS_REFCURSOR) IS
-    BEGIN
-        OPEN p_cursor FOR SELECT * FROM Proveedores WHERE id_proveedor = p_id_proveedor;
-    END;
+CREATE PROCEDURE PA_PROVEEDORES_CREAR(p_nombre VARCHAR(100), p_telefono VARCHAR(20), p_direccion VARCHAR(255))
+BEGIN
+    INSERT INTO Proveedores(nombre, telefono, direccion)
+    VALUES(p_nombre, p_telefono, p_direccion);
+END //
 
-    PROCEDURE PA_ACTUALIZAR_PROVEEDOR(p_id_proveedor IN NUMBER, p_nombre IN VARCHAR2, p_telefono IN VARCHAR2, p_direccion IN VARCHAR2) IS
-    BEGIN
-        UPDATE Proveedores
-        SET nombre = p_nombre, telefono = p_telefono, direccion = p_direccion
-        WHERE id_proveedor = p_id_proveedor;
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_PROVEEDORES_LEER_ID(p_id_proveedor INT)
+BEGIN
+    SELECT * FROM Proveedores WHERE id_proveedor = p_id_proveedor;
+END //
 
-    PROCEDURE PA_ELIMINAR_PROVEEDOR(p_id_proveedor IN NUMBER) IS
-    BEGIN
-        DELETE FROM Proveedores WHERE id_proveedor = p_id_proveedor;
-        COMMIT;
-    END;
-END PKG_PROVEEDORES;
-/
+CREATE PROCEDURE PA_PROVEEDORES_ACTUALIZAR(p_id_proveedor INT, p_nombre VARCHAR(100), p_telefono VARCHAR(20), p_direccion VARCHAR(255))
+BEGIN
+    UPDATE Proveedores
+    SET nombre = p_nombre, telefono = p_telefono, direccion = p_direccion
+    WHERE id_proveedor = p_id_proveedor;
+END //
+
+CREATE PROCEDURE PA_PROVEEDORES_ELIMINAR(p_id_proveedor INT)
+BEGIN
+    DELETE FROM Proveedores WHERE id_proveedor = p_id_proveedor;
+END //
 
 /* ===========================================================
-   PAQUETE: CLIENTES
+    PAQUETE: CLIENTES
 =========================================================== */
-CREATE OR REPLACE PACKAGE PKG_CLIENTES AS
-    PROCEDURE PA_CREAR_CLIENTE(p_nombre IN VARCHAR2, p_correo IN VARCHAR2, p_telefono IN VARCHAR2);
-    PROCEDURE PA_LEER_CLIENTE_ID(p_id_cliente IN NUMBER, p_cursor OUT SYS_REFCURSOR);
-    PROCEDURE PA_ACTUALIZAR_CLIENTE(p_id_cliente IN NUMBER, p_nombre IN VARCHAR2, p_correo IN VARCHAR2, p_telefono IN VARCHAR2);
-    PROCEDURE PA_ELIMINAR_CLIENTE(p_id_cliente IN NUMBER);
-END PKG_CLIENTES;
-/
-CREATE OR REPLACE PACKAGE BODY PKG_CLIENTES AS
-    PROCEDURE PA_CREAR_CLIENTE(p_nombre IN VARCHAR2, p_correo IN VARCHAR2, p_telefono IN VARCHAR2) IS
-    BEGIN
-        INSERT INTO Clientes(nombre, correo, telefono)
-        VALUES(p_nombre, p_correo, p_telefono);
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_CLIENTES_CREAR(p_nombre VARCHAR(100), p_correo VARCHAR(100), p_telefono VARCHAR(20))
+BEGIN
+    INSERT INTO Clientes(nombre, correo, telefono)
+    VALUES(p_nombre, p_correo, p_telefono);
+END //
 
-    PROCEDURE PA_LEER_CLIENTE_ID(p_id_cliente IN NUMBER, p_cursor OUT SYS_REFCURSOR) IS
-    BEGIN
-        OPEN p_cursor FOR SELECT * FROM Clientes WHERE id_cliente = p_id_cliente;
-    END;
+CREATE PROCEDURE PA_CLIENTES_LEER_ID(p_id_cliente INT)
+BEGIN
+    SELECT * FROM Clientes WHERE id_cliente = p_id_cliente;
+END //
 
-    PROCEDURE PA_ACTUALIZAR_CLIENTE(p_id_cliente IN NUMBER, p_nombre IN VARCHAR2, p_correo IN VARCHAR2, p_telefono IN VARCHAR2) IS
-    BEGIN
-        UPDATE Clientes
-        SET nombre = p_nombre, correo = p_correo, telefono = p_telefono
-        WHERE id_cliente = p_id_cliente;
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_CLIENTES_ACTUALIZAR(p_id_cliente INT, p_nombre VARCHAR(100), p_correo VARCHAR(100), p_telefono VARCHAR(20))
+BEGIN
+    UPDATE Clientes
+    SET nombre = p_nombre, correo = p_correo, telefono = p_telefono
+    WHERE id_cliente = p_id_cliente;
+END //
 
-    PROCEDURE PA_ELIMINAR_CLIENTE(p_id_cliente IN NUMBER) IS
-    BEGIN
-        DELETE FROM Clientes WHERE id_cliente = p_id_cliente;
-        COMMIT;
-    END;
-END PKG_CLIENTES;
-/
+CREATE PROCEDURE PA_CLIENTES_ELIMINAR(p_id_cliente INT)
+BEGIN
+    DELETE FROM Clientes WHERE id_cliente = p_id_cliente;
+END //
 
 /* ===========================================================
-   PAQUETE: EMPLEADOS
+    PAQUETE: EMPLEADOS
 =========================================================== */
-CREATE OR REPLACE PACKAGE PKG_EMPLEADOS AS
-    PROCEDURE PA_CREAR_EMPLEADO(p_nombre IN VARCHAR2, p_puesto IN VARCHAR2, p_salario IN NUMBER, p_fecha_contratacion IN DATE);
-    PROCEDURE PA_LEER_EMPLEADO_ID(p_id_empleado IN NUMBER, p_cursor OUT SYS_REFCURSOR);
-    PROCEDURE PA_ACTUALIZAR_EMPLEADO(p_id_empleado IN NUMBER, p_nombre IN VARCHAR2, p_puesto IN VARCHAR2, p_salario IN NUMBER, p_fecha_contratacion IN DATE);
-    PROCEDURE PA_ELIMINAR_EMPLEADO(p_id_empleado IN NUMBER);
-END PKG_EMPLEADOS;
-/
-CREATE OR REPLACE PACKAGE BODY PKG_EMPLEADOS AS
-    PROCEDURE PA_CREAR_EMPLEADO(p_nombre IN VARCHAR2, p_puesto IN VARCHAR2, p_salario IN NUMBER, p_fecha_contratacion IN DATE) IS
-    BEGIN
-        INSERT INTO Empleados(nombre, puesto, salario, fecha_contratacion)
-        VALUES(p_nombre, p_puesto, p_salario, p_fecha_contratacion);
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_EMPLEADOS_CREAR(p_nombre VARCHAR(100), p_puesto VARCHAR(100), p_salario DECIMAL(10,2), p_fecha_contratacion DATE)
+BEGIN
+    INSERT INTO Empleados(nombre, puesto, salario, fecha_contratacion)
+    VALUES(p_nombre, p_puesto, p_salario, p_fecha_contratacion);
+END //
 
-    PROCEDURE PA_LEER_EMPLEADO_ID(p_id_empleado IN NUMBER, p_cursor OUT SYS_REFCURSOR) IS
-    BEGIN
-        OPEN p_cursor FOR SELECT * FROM Empleados WHERE id_empleado = p_id_empleado;
-    END;
+CREATE PROCEDURE PA_EMPLEADOS_LEER_ID(p_id_empleado INT)
+BEGIN
+    SELECT * FROM Empleados WHERE id_empleado = p_id_empleado;
+END //
 
-    PROCEDURE PA_ACTUALIZAR_EMPLEADO(p_id_empleado IN NUMBER, p_nombre IN VARCHAR2, p_puesto IN VARCHAR2, p_salario IN NUMBER, p_fecha_contratacion IN DATE) IS
-    BEGIN
-        UPDATE Empleados
-        SET nombre = p_nombre, puesto = p_puesto, salario = p_salario, fecha_contratacion = p_fecha_contratacion
-        WHERE id_empleado = p_id_empleado;
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_EMPLEADOS_ACTUALIZAR(p_id_empleado INT, p_nombre VARCHAR(100), p_puesto VARCHAR(100), p_salario DECIMAL(10,2), p_fecha_contratacion DATE)
+BEGIN
+    UPDATE Empleados
+    SET nombre = p_nombre, puesto = p_puesto, salario = p_salario, fecha_contratacion = p_fecha_contratacion
+    WHERE id_empleado = p_id_empleado;
+END //
 
-    PROCEDURE PA_ELIMINAR_EMPLEADO(p_id_empleado IN NUMBER) IS
-    BEGIN
-        DELETE FROM Empleados WHERE id_empleado = p_id_empleado;
-        COMMIT;
-    END;
-END PKG_EMPLEADOS;
-/
+CREATE PROCEDURE PA_EMPLEADOS_ELIMINAR(p_id_empleado INT)
+BEGIN
+    DELETE FROM Empleados WHERE id_empleado = p_id_empleado;
+END //
 
 /* ===========================================================
-   PAQUETE: MENU
+    PAQUETE: MENU
 =========================================================== */
-CREATE OR REPLACE PACKAGE PKG_MENU AS
-    PROCEDURE PA_CREAR_MENU(p_nombre IN VARCHAR2, p_descripcion IN CLOB, p_precio_venta IN NUMBER);
-    PROCEDURE PA_LEER_MENU_ID(p_id_plato IN NUMBER, p_cursor OUT SYS_REFCURSOR);
-    PROCEDURE PA_ACTUALIZAR_MENU(p_id_plato IN NUMBER, p_nombre IN VARCHAR2, p_descripcion IN CLOB, p_precio_venta IN NUMBER);
-    PROCEDURE PA_ELIMINAR_MENU(p_id_plato IN NUMBER);
-END PKG_MENU;
-/
-CREATE OR REPLACE PACKAGE BODY PKG_MENU AS
-    PROCEDURE PA_CREAR_MENU(p_nombre IN VARCHAR2, p_descripcion IN CLOB, p_precio_venta IN NUMBER) IS
-    BEGIN
-        INSERT INTO Menu(nombre, descripcion, precio_venta)
-        VALUES(p_nombre, p_descripcion, p_precio_venta);
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_MENU_CREAR(p_nombre VARCHAR(100), p_descripcion TEXT, p_precio_venta DECIMAL(10,2))
+BEGIN
+    INSERT INTO Menu(nombre, descripcion, precio_venta)
+    VALUES(p_nombre, p_descripcion, p_precio_venta);
+END //
 
-    PROCEDURE PA_LEER_MENU_ID(p_id_plato IN NUMBER, p_cursor OUT SYS_REFCURSOR) IS
-    BEGIN
-        OPEN p_cursor FOR SELECT * FROM Menu WHERE id_plato = p_id_plato;
-    END;
+CREATE PROCEDURE PA_MENU_LEER_ID(p_id_plato INT)
+BEGIN
+    SELECT * FROM Menu WHERE id_plato = p_id_plato;
+END //
 
-    PROCEDURE PA_ACTUALIZAR_MENU(p_id_plato IN NUMBER, p_nombre IN VARCHAR2, p_descripcion IN CLOB, p_precio_venta IN NUMBER) IS
-    BEGIN
-        UPDATE Menu
-        SET nombre = p_nombre, descripcion = p_descripcion, precio_venta = p_precio_venta
-        WHERE id_plato = p_id_plato;
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_MENU_ACTUALIZAR(p_id_plato INT, p_nombre VARCHAR(100), p_descripcion TEXT, p_precio_venta DECIMAL(10,2))
+BEGIN
+    UPDATE Menu
+    SET nombre = p_nombre, descripcion = p_descripcion, precio_venta = p_precio_venta
+    WHERE id_plato = p_id_plato;
+END //
 
-    PROCEDURE PA_ELIMINAR_MENU(p_id_plato IN NUMBER) IS
-    BEGIN
-        DELETE FROM Menu WHERE id_plato = p_id_plato;
-        COMMIT;
-    END;
-END PKG_MENU;
-/
+CREATE PROCEDURE PA_MENU_ELIMINAR(p_id_plato INT)
+BEGIN
+    DELETE FROM Menu WHERE id_plato = p_id_plato;
+END //
 
 /* ===========================================================
-   PAQUETE: PRODUCTOS
+    PAQUETE: PRODUCTOS
 =========================================================== */
-CREATE OR REPLACE PACKAGE PKG_PRODUCTOS AS
-    PROCEDURE PA_CREAR_PRODUCTO(p_nombre IN VARCHAR2, p_categoria IN VARCHAR2, p_precio_compra IN NUMBER, p_stock IN NUMBER, p_id_proveedor IN NUMBER);
-    PROCEDURE PA_LEER_PRODUCTO_ID(p_id_producto IN NUMBER, p_cursor OUT SYS_REFCURSOR);
-    PROCEDURE PA_ACTUALIZAR_PRODUCTO(p_id_producto IN NUMBER, p_nombre IN VARCHAR2, p_categoria IN VARCHAR2, p_precio_compra IN NUMBER, p_stock IN NUMBER, p_id_proveedor IN NUMBER);
-    PROCEDURE PA_ELIMINAR_PRODUCTO(p_id_producto IN NUMBER);
-END PKG_PRODUCTOS;
-/
-CREATE OR REPLACE PACKAGE BODY PKG_PRODUCTOS AS
-    PROCEDURE PA_CREAR_PRODUCTO(p_nombre IN VARCHAR2, p_categoria IN VARCHAR2, p_precio_compra IN NUMBER, p_stock IN NUMBER, p_id_proveedor IN NUMBER) IS
-    BEGIN
-        INSERT INTO Productos(nombre, categoria, precio_compra, stock, id_proveedor)
-        VALUES(p_nombre, p_categoria, p_precio_compra, p_stock, p_id_proveedor);
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_PRODUCTOS_CREAR(p_nombre VARCHAR(100), p_categoria VARCHAR(100), p_precio_compra DECIMAL(10,2), p_stock INT, p_id_proveedor INT)
+BEGIN
+    INSERT INTO Productos(nombre, categoria, precio_compra, stock, id_proveedor)
+    VALUES(p_nombre, p_categoria, p_precio_compra, p_stock, p_id_proveedor);
+END //
 
-    PROCEDURE PA_LEER_PRODUCTO_ID(p_id_producto IN NUMBER, p_cursor OUT SYS_REFCURSOR) IS
-    BEGIN
-        OPEN p_cursor FOR SELECT * FROM Productos WHERE id_producto = p_id_producto;
-    END;
+CREATE PROCEDURE PA_PRODUCTOS_LEER_ID(p_id_producto INT)
+BEGIN
+    SELECT * FROM Productos WHERE id_producto = p_id_producto;
+END //
 
-    PROCEDURE PA_ACTUALIZAR_PRODUCTO(p_id_producto IN NUMBER, p_nombre IN VARCHAR2, p_categoria IN VARCHAR2, p_precio_compra IN NUMBER, p_stock IN NUMBER, p_id_proveedor IN NUMBER) IS
-    BEGIN
-        UPDATE Productos
-        SET nombre = p_nombre, categoria = p_categoria, precio_compra = p_precio_compra, stock = p_stock, id_proveedor = p_id_proveedor
-        WHERE id_producto = p_id_producto;
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_PRODUCTOS_ACTUALIZAR(p_id_producto INT, p_nombre VARCHAR(100), p_categoria VARCHAR(100), p_precio_compra DECIMAL(10,2), p_stock INT, p_id_proveedor INT)
+BEGIN
+    UPDATE Productos
+    SET nombre = p_nombre, categoria = p_categoria, precio_compra = p_precio_compra, stock = p_stock, id_proveedor = p_id_proveedor
+    WHERE id_producto = p_id_producto;
+END //
 
-    PROCEDURE PA_ELIMINAR_PRODUCTO(p_id_producto IN NUMBER) IS
-    BEGIN
-        DELETE FROM Productos WHERE id_producto = p_id_producto;
-        COMMIT;
-    END;
-END PKG_PRODUCTOS;
-/
+CREATE PROCEDURE PA_PRODUCTOS_ELIMINAR(p_id_producto INT)
+BEGIN
+    DELETE FROM Productos WHERE id_producto = p_id_producto;
+END //
 
 /* ===========================================================
-   PAQUETE: PEDIDOS
+    PAQUETE: PEDIDOS
 =========================================================== */
-CREATE OR REPLACE PACKAGE PKG_PEDIDOS AS
-    PROCEDURE PA_CREAR_PEDIDO(p_fecha IN DATE, p_id_cliente IN NUMBER);
-    PROCEDURE PA_LEER_PEDIDO_ID(p_id_pedido IN NUMBER, p_cursor OUT SYS_REFCURSOR);
-    PROCEDURE PA_ACTUALIZAR_PEDIDO(p_id_pedido IN NUMBER, p_fecha IN DATE, p_total IN NUMBER, p_estado IN VARCHAR2, p_id_cliente IN NUMBER);
-    PROCEDURE PA_ELIMINAR_PEDIDO(p_id_pedido IN NUMBER);
-END PKG_PEDIDOS;
-/
-CREATE OR REPLACE PACKAGE BODY PKG_PEDIDOS AS
-    PROCEDURE PA_CREAR_PEDIDO(p_fecha IN DATE, p_id_cliente IN NUMBER) IS
-    BEGIN
-        INSERT INTO Pedidos(fecha, total, estado, id_cliente)
-        VALUES(p_fecha, 0, 'En Proceso', p_id_cliente);
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_PEDIDOS_CREAR(p_fecha DATE, p_id_cliente INT)
+BEGIN
+    INSERT INTO Pedidos(fecha, total, estado, id_cliente)
+    VALUES(p_fecha, 0, 'En Proceso', p_id_cliente);
+END //
 
-    PROCEDURE PA_LEER_PEDIDO_ID(p_id_pedido IN NUMBER, p_cursor OUT SYS_REFCURSOR) IS
-    BEGIN
-        OPEN p_cursor FOR SELECT * FROM Pedidos WHERE id_pedido = p_id_pedido;
-    END;
+CREATE PROCEDURE PA_PEDIDOS_LEER_ID(p_id_pedido INT)
+BEGIN
+    SELECT * FROM Pedidos WHERE id_pedido = p_id_pedido;
+END //
 
-    PROCEDURE PA_ACTUALIZAR_PEDIDO(p_id_pedido IN NUMBER, p_fecha IN DATE, p_total IN NUMBER, p_estado IN VARCHAR2, p_id_cliente IN NUMBER) IS
-    BEGIN
-        UPDATE Pedidos
-        SET fecha = p_fecha, total = p_total, estado = p_estado, id_cliente = p_id_cliente
-        WHERE id_pedido = p_id_pedido;
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_PEDIDOS_ACTUALIZAR(p_id_pedido INT, p_fecha DATE, p_total DECIMAL(10,2), p_estado VARCHAR(50), p_id_cliente INT)
+BEGIN
+    UPDATE Pedidos
+    SET fecha = p_fecha, total = p_total, estado = p_estado, id_cliente = p_id_cliente
+    WHERE id_pedido = p_id_pedido;
+END //
 
-    PROCEDURE PA_ELIMINAR_PEDIDO(p_id_pedido IN NUMBER) IS
-    BEGIN
-        DELETE FROM Pedidos WHERE id_pedido = p_id_pedido;
-        COMMIT;
-    END;
-END PKG_PEDIDOS;
-/
+CREATE PROCEDURE PA_PEDIDOS_ELIMINAR(p_id_pedido INT)
+BEGIN
+    DELETE FROM Pedidos WHERE id_pedido = p_id_pedido;
+END //
 
 /* ===========================================================
-   PAQUETE: DETALLE_PEDIDO
+    PAQUETE: DETALLE_PEDIDO
 =========================================================== */
-CREATE OR REPLACE PACKAGE PKG_DETALLE_PEDIDO AS
-    PROCEDURE PA_CREAR_DETALLE_PEDIDO(p_id_pedido IN NUMBER, p_id_plato IN NUMBER, p_cantidad IN NUMBER, p_subtotal IN NUMBER);
-    PROCEDURE PA_LEER_DETALLE_ID(p_id_detalle IN NUMBER, p_cursor OUT SYS_REFCURSOR);
-    PROCEDURE PA_ACTUALIZAR_DETALLE_PEDIDO(p_id_detalle IN NUMBER, p_cantidad IN NUMBER, p_subtotal IN NUMBER);
-    PROCEDURE PA_ELIMINAR_DETALLE_PEDIDO(p_id_detalle IN NUMBER);
-END PKG_DETALLE_PEDIDO;
-/
-CREATE OR REPLACE PACKAGE BODY PKG_DETALLE_PEDIDO AS
-    PROCEDURE PA_CREAR_DETALLE_PEDIDO(p_id_pedido IN NUMBER, p_id_plato IN NUMBER, p_cantidad IN NUMBER, p_subtotal IN NUMBER) IS
-    BEGIN
-        INSERT INTO Detalle_Pedido(id_pedido, id_plato, cantidad, subtotal)
-        VALUES(p_id_pedido, p_id_plato, p_cantidad, p_subtotal);
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_DETALLE_PEDIDO_CREAR(p_id_pedido INT, p_id_plato INT, p_cantidad INT, p_subtotal DECIMAL(10,2))
+BEGIN
+    INSERT INTO Detalle_Pedido(id_pedido, id_plato, cantidad, subtotal)
+    VALUES(p_id_pedido, p_id_plato, p_cantidad, p_subtotal);
+END //
 
-    PROCEDURE PA_LEER_DETALLE_ID(p_id_detalle IN NUMBER, p_cursor OUT SYS_REFCURSOR) IS
-    BEGIN
-        OPEN p_cursor FOR SELECT * FROM Detalle_Pedido WHERE id_detalle = p_id_detalle;
-    END;
+CREATE PROCEDURE PA_DETALLE_PEDIDO_LEER_ID(p_id_detalle INT)
+BEGIN
+    SELECT * FROM Detalle_Pedido WHERE id_detalle = p_id_detalle;
+END //
 
-    PROCEDURE PA_ACTUALIZAR_DETALLE_PEDIDO(p_id_detalle IN NUMBER, p_cantidad IN NUMBER, p_subtotal IN NUMBER) IS
-    BEGIN
-        UPDATE Detalle_Pedido
-        SET cantidad = p_cantidad, subtotal = p_subtotal
-        WHERE id_detalle = p_id_detalle;
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_DETALLE_PEDIDO_ACTUALIZAR(p_id_detalle INT, p_cantidad INT, p_subtotal DECIMAL(10,2))
+BEGIN
+    UPDATE Detalle_Pedido
+    SET cantidad = p_cantidad, subtotal = p_subtotal
+    WHERE id_detalle = p_id_detalle;
+END //
 
-    PROCEDURE PA_ELIMINAR_DETALLE_PEDIDO(p_id_detalle IN NUMBER) IS
-    BEGIN
-        DELETE FROM Detalle_Pedido WHERE id_detalle = p_id_detalle;
-        COMMIT;
-    END;
-END PKG_DETALLE_PEDIDO;
-/
+CREATE PROCEDURE PA_DETALLE_PEDIDO_ELIMINAR(p_id_detalle INT)
+BEGIN
+    DELETE FROM Detalle_Pedido WHERE id_detalle = p_id_detalle;
+END //
 
 /* ===========================================================
-   PAQUETE: FACTURAS
+    PAQUETE: FACTURAS
 =========================================================== */
-CREATE OR REPLACE PACKAGE PKG_FACTURAS AS
-    PROCEDURE PA_CREAR_FACTURA(p_id_pedido IN NUMBER, p_fecha_emision IN DATE, p_monto_total IN NUMBER, p_metodo_pago IN VARCHAR2);
-    PROCEDURE PA_LEER_FACTURA_ID(p_id_factura IN NUMBER, p_cursor OUT SYS_REFCURSOR);
-    PROCEDURE PA_ACTUALIZAR_FACTURA(p_id_factura IN NUMBER, p_fecha_emision IN DATE, p_monto_total IN NUMBER, p_metodo_pago IN VARCHAR2);
-    PROCEDURE PA_ELIMINAR_FACTURA(p_id_factura IN NUMBER);
-END PKG_FACTURAS;
-/
-CREATE OR REPLACE PACKAGE BODY PKG_FACTURAS AS
-    PROCEDURE PA_CREAR_FACTURA(p_id_pedido IN NUMBER, p_fecha_emision IN DATE, p_monto_total IN NUMBER, p_metodo_pago IN VARCHAR2) IS
-    BEGIN
-        INSERT INTO Facturas(id_pedido, fecha_emision, monto_total, metodo_pago)
-        VALUES(p_id_pedido, p_fecha_emision, p_monto_total, p_metodo_pago);
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_FACTURAS_CREAR(p_id_pedido INT, p_fecha_emision DATE, p_monto_total DECIMAL(10,2), p_metodo_pago VARCHAR(50))
+BEGIN
+    INSERT INTO Facturas(id_pedido, fecha_emision, monto_total, metodo_pago)
+    VALUES(p_id_pedido, p_fecha_emision, p_monto_total, p_metodo_pago);
+END //
 
-    PROCEDURE PA_LEER_FACTURA_ID(p_id_factura IN NUMBER, p_cursor OUT SYS_REFCURSOR) IS
-    BEGIN
-        OPEN p_cursor FOR SELECT * FROM Facturas WHERE id_factura = p_id_factura;
-    END;
+CREATE PROCEDURE PA_FACTURAS_LEER_ID(p_id_factura INT)
+BEGIN
+    SELECT * FROM Facturas WHERE id_factura = p_id_factura;
+END //
 
-    PROCEDURE PA_ACTUALIZAR_FACTURA(p_id_factura IN NUMBER, p_fecha_emision IN DATE, p_monto_total IN NUMBER, p_metodo_pago IN VARCHAR2) IS
-    BEGIN
-        UPDATE Facturas
-        SET fecha_emision = p_fecha_emision, monto_total = p_monto_total, metodo_pago = p_metodo_pago
-        WHERE id_factura = p_id_factura;
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_FACTURAS_ACTUALIZAR(p_id_factura INT, p_fecha_emision DATE, p_monto_total DECIMAL(10,2), p_metodo_pago VARCHAR(50))
+BEGIN
+    UPDATE Facturas
+    SET fecha_emision = p_fecha_emision, monto_total = p_monto_total, metodo_pago = p_metodo_pago
+    WHERE id_factura = p_id_factura;
+END //
 
-    PROCEDURE PA_ELIMINAR_FACTURA(p_id_factura IN NUMBER) IS
-    BEGIN
-        DELETE FROM Facturas WHERE id_factura = p_id_factura;
-        COMMIT;
-    END;
-END PKG_FACTURAS;
-/
+CREATE PROCEDURE PA_FACTURAS_ELIMINAR(p_id_factura INT)
+BEGIN
+    DELETE FROM Facturas WHERE id_factura = p_id_factura;
+END //
 
 /* ===========================================================
-   PAQUETE: REPORTES
-   Generación de informes de ventas, pedidos e inventario
+    PAQUETE: REPORTES
+    Generación de informes de ventas, pedidos e inventario
 =========================================================== */
-CREATE OR REPLACE PACKAGE PKG_REPORTES AS
-    PROCEDURE PA_REPORTE_VENTAS(p_fecha_inicio IN DATE, p_fecha_fin IN DATE, p_cursor OUT SYS_REFCURSOR);
-    PROCEDURE PA_REPORTE_PEDIDOS(p_fecha_inicio IN DATE, p_fecha_fin IN DATE, p_cursor OUT SYS_REFCURSOR);
-    PROCEDURE PA_REPORTE_INVENTARIO(p_cursor OUT SYS_REFCURSOR);
-END PKG_REPORTES;
-/
-CREATE OR REPLACE PACKAGE BODY PKG_REPORTES AS
-    PROCEDURE PA_REPORTE_VENTAS(p_fecha_inicio IN DATE, p_fecha_fin IN DATE, p_cursor OUT SYS_REFCURSOR) IS
-    BEGIN
-        OPEN p_cursor FOR
-            SELECT F.id_factura,
-                   F.fecha_emision,
-                   F.monto_total,
-                   C.nombre AS cliente,
-                   P.id_pedido
-              FROM Facturas F
-              JOIN Pedidos P ON F.id_pedido = P.id_pedido
-              JOIN Clientes C ON P.id_cliente = C.id_cliente
-             WHERE F.fecha_emision BETWEEN p_fecha_inicio AND p_fecha_fin
-             ORDER BY F.fecha_emision;
-    END;
+CREATE PROCEDURE PA_REPORTES_VENTAS(p_fecha_inicio DATE, p_fecha_fin DATE)
+BEGIN
+    SELECT F.id_factura,
+           F.fecha_emision,
+           F.monto_total,
+           C.nombre AS cliente,
+           P.id_pedido
+      FROM Facturas F
+      JOIN Pedidos P ON F.id_pedido = P.id_pedido
+      JOIN Clientes C ON P.id_cliente = C.id_cliente
+     WHERE F.fecha_emision BETWEEN p_fecha_inicio AND p_fecha_fin
+     ORDER BY F.fecha_emision;
+END //
 
-    PROCEDURE PA_REPORTE_PEDIDOS(p_fecha_inicio IN DATE, p_fecha_fin IN DATE, p_cursor OUT SYS_REFCURSOR) IS
-    BEGIN
-        OPEN p_cursor FOR
-            SELECT P.id_pedido,
-                   C.nombre AS cliente,
-                   P.fecha,
-                   P.total,
-                   P.estado
-              FROM Pedidos P
-              JOIN Clientes C ON P.id_cliente = C.id_cliente
-             WHERE P.fecha BETWEEN p_fecha_inicio AND p_fecha_fin
-             ORDER BY P.fecha;
-    END;
+CREATE PROCEDURE PA_REPORTES_PEDIDOS(p_fecha_inicio DATE, p_fecha_fin DATE)
+BEGIN
+    SELECT P.id_pedido,
+           C.nombre AS cliente,
+           P.fecha,
+           P.total,
+           P.estado
+      FROM Pedidos P
+      JOIN Clientes C ON P.id_cliente = C.id_cliente
+     WHERE P.fecha BETWEEN p_fecha_inicio AND p_fecha_fin
+     ORDER BY P.fecha;
+END //
 
-    PROCEDURE PA_REPORTE_INVENTARIO(p_cursor OUT SYS_REFCURSOR) IS
-    BEGIN
-        OPEN p_cursor FOR
-            SELECT PR.id_producto,
-                   PR.nombre,
-                   PR.categoria,
-                   PR.stock,
-                   PR.precio_compra,
-                   PROV.nombre AS proveedor
-              FROM Productos PR
-              JOIN Proveedores PROV ON PR.id_proveedor = PROV.id_proveedor
-             ORDER BY PR.nombre;
-    END;
-END PKG_REPORTES;
-/
+CREATE PROCEDURE PA_REPORTES_INVENTARIO()
+BEGIN
+    SELECT PR.id_producto,
+           PR.nombre,
+           PR.categoria,
+           PR.stock,
+           PR.precio_compra,
+           PROV.nombre AS proveedor
+      FROM Productos PR
+      JOIN Proveedores PROV ON PR.id_proveedor = PROV.id_proveedor
+     ORDER BY PR.nombre;
+END //
 
 /* ===========================================================
-   PAQUETE: UTILIDADES
-   Funciones y procedimientos auxiliares
+    PAQUETE: UTILIDADES
+    Funciones y procedimientos auxiliares
 =========================================================== */
-CREATE OR REPLACE PACKAGE PKG_UTILIDADES AS
-    FUNCTION PA_CALCULAR_TOTAL_PEDIDO(p_id_pedido IN NUMBER) RETURN NUMBER;
-    PROCEDURE PA_ACTUALIZAR_TOTAL_PEDIDO(p_id_pedido IN NUMBER);
-    FUNCTION PA_OBTENER_STOCK_PRODUCTO(p_id_producto IN NUMBER) RETURN NUMBER;
-END PKG_UTILIDADES;
-/
-CREATE OR REPLACE PACKAGE BODY PKG_UTILIDADES AS
-    FUNCTION PA_CALCULAR_TOTAL_PEDIDO(p_id_pedido IN NUMBER) RETURN NUMBER IS
-        v_total NUMBER := 0;
-    BEGIN
-        SELECT NVL(SUM(subtotal),0)
-        INTO v_total
-        FROM Detalle_Pedido
-        WHERE id_pedido = p_id_pedido;
-        RETURN v_total;
-    END;
+CREATE FUNCTION FN_UTILIDADES_CALCULAR_TOTAL_PEDIDO(p_id_pedido INT) RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    DECLARE v_total DECIMAL(10,2) DEFAULT 0;
+    SELECT IFNULL(SUM(subtotal), 0)
+    INTO v_total
+    FROM Detalle_Pedido
+    WHERE id_pedido = p_id_pedido;
+    RETURN v_total;
+END //
 
-    PROCEDURE PA_ACTUALIZAR_TOTAL_PEDIDO(p_id_pedido IN NUMBER) IS
-        v_total NUMBER;
-    BEGIN
-        v_total := PA_CALCULAR_TOTAL_PEDIDO(p_id_pedido);
-        UPDATE Pedidos
-        SET total = v_total
-        WHERE id_pedido = p_id_pedido;
-        COMMIT;
-    END;
+CREATE PROCEDURE PA_UTILIDADES_ACTUALIZAR_TOTAL_PEDIDO(p_id_pedido INT)
+BEGIN
+    DECLARE v_total DECIMAL(10,2);
+    SET v_total = FN_UTILIDADES_CALCULAR_TOTAL_PEDIDO(p_id_pedido);
+    UPDATE Pedidos
+    SET total = v_total
+    WHERE id_pedido = p_id_pedido;
+END //
 
-    FUNCTION PA_OBTENER_STOCK_PRODUCTO(p_id_producto IN NUMBER) RETURN NUMBER IS
-        v_stock NUMBER;
-    BEGIN
-        SELECT stock INTO v_stock
-        FROM Productos
-        WHERE id_producto = p_id_producto;
-        RETURN v_stock;
-    EXCEPTION
-        WHEN NO_DATA_FOUND THEN
-            RETURN 0;
-    END;
-END PKG_UTILIDADES;
-/
+CREATE FUNCTION FN_UTILIDADES_OBTENER_STOCK_PRODUCTO(p_id_producto INT) RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE v_stock INT DEFAULT 0;
+    SELECT stock INTO v_stock
+    FROM Productos
+    WHERE id_producto = p_id_producto;
+    RETURN v_stock;
+END //
+
+DELIMITER ;
