@@ -9,13 +9,17 @@ import com.mycompany.deliciasdealtura.util.Estilos;
 public class MenuPrincipal extends javax.swing.JFrame {
     
     private JButton btnPedido;
+    private JButton btnClientes;
+    private JButton btnProductos;
+    private JButton btnPlatos;
+    private JButton btnVentas;
     
     public MenuPrincipal() {
         setTitle("Delicias de Altura");
-        setSize(420, 300);
+        setSize(450, 420);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null); // simple y directo
+        setLayout(null);
 
         inicializarComponentes();
     }
@@ -36,21 +40,52 @@ public class MenuPrincipal extends javax.swing.JFrame {
         lblSubtitulo.setBounds(60, 65, 300, 20);
         add(lblSubtitulo);
 
-        // Botón Registrar Pedido
+        int x = 120;
+        int y = 100;
+        int ancho = 200;
+        int alto = 40;
+        int espacio = 45;
+
         btnPedido = new JButton("Registrar Pedido");
-        btnPedido.setBounds(110, 130, 200, 45);
+        btnPedido.setBounds(x, y, ancho, alto);
         Estilos.botonPrincipal(btnPedido);
         add(btnPedido);
 
-        btnPedido.addActionListener(e -> {
-            new FormPedido().setVisible(true);
-        });
+        btnClientes = new JButton("Gestionar Clientes");
+        btnClientes.setBounds(x, y + espacio, ancho, alto);
+        Estilos.botonPrincipal(btnClientes);
+        add(btnClientes);
+
+        btnProductos = new JButton("Gestionar Productos");
+        btnProductos.setBounds(x, y + espacio * 2, ancho, alto);
+        Estilos.botonPrincipal(btnProductos);
+        add(btnProductos);
+
+        btnPlatos = new JButton("Gestionar Platos");
+        btnPlatos.setBounds(x, y + espacio * 3, ancho, alto);
+        Estilos.botonPrincipal(btnPlatos);
+        add(btnPlatos);
+
+        btnVentas = new JButton("Ver Ventas");
+        btnVentas.setBounds(x, y + espacio * 4, ancho, alto);
+        Estilos.botonPrincipal(btnVentas);
+        add(btnVentas);
+
+        // EVENTOS
+        btnPedido.addActionListener(e -> new FormPedido().setVisible(true));
+        btnClientes.addActionListener(e -> new FormCliente().setVisible(true));
+        btnProductos.addActionListener(e -> new FormProducto().setVisible(true));
+        btnPlatos.addActionListener(e -> new FormPlato().setVisible(true));
+        btnVentas.addActionListener(e -> new FormReporteVentas().setVisible(true));
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(450, 420));
+        setResizable(false);
+        setSize(new java.awt.Dimension(450, 420));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

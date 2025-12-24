@@ -1,0 +1,186 @@
+package com.mycompany.deliciasdealtura.vista;
+
+import com.mycompany.deliciasdealtura.dao.ClienteDAO;
+import com.mycompany.deliciasdealtura.modelo.Cliente;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.sql.SQLException;
+import java.util.List;
+
+public class FormCliente extends javax.swing.JFrame {
+    private JTextField txtId, txtNombre, txtTelefono;
+    private JTable tabla;
+    private DefaultTableModel modelo;
+    private ClienteDAO dao = new ClienteDAO();
+
+    /**
+     * Creates new form FormCliente
+     */
+    public FormCliente() {
+        setTitle("CRUD Clientes");
+        setSize(500, 400);
+        setLocationRelativeTo(null);
+        setLayout(null);
+
+        JLabel lblTitulo = new JLabel("Gestión de Clientes", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitulo.setBounds(120, 10, 250, 30);
+        add(lblTitulo);
+
+        JLabel lblId = new JLabel("ID:");
+        lblId.setBounds(30, 60, 80, 25);
+        add(lblId);
+
+        txtId = new JTextField();
+        txtId.setBounds(100, 60, 100, 25);
+        txtId.setEnabled(false);
+        add(txtId);
+
+        JLabel lblNombre = new JLabel("Nombre:");
+        lblNombre.setBounds(30, 90, 80, 25);
+        add(lblNombre);
+
+        txtNombre = new JTextField();
+        txtNombre.setBounds(100, 90, 150, 25);
+        add(txtNombre);
+
+        JLabel lblTelefono = new JLabel("Teléfono:");
+        lblTelefono.setBounds(30, 120, 80, 25);
+        add(lblTelefono);
+
+        txtTelefono = new JTextField();
+        txtTelefono.setBounds(100, 120, 150, 25);
+        add(txtTelefono);
+
+        JButton btnGuardar = new JButton("Guardar");
+        btnGuardar.setBounds(280, 80, 150, 30);
+        add(btnGuardar);
+
+        JButton btnActualizar = new JButton("Actualizar");
+        btnActualizar.setBounds(280, 120, 150, 30);
+        add(btnActualizar);
+
+        JButton btnEliminar = new JButton("Eliminar");
+        btnEliminar.setBounds(280, 160, 150, 30);
+        add(btnEliminar);
+
+        modelo = new DefaultTableModel(new String[]{"ID", "Nombre", "Teléfono"}, 0);
+        tabla = new JTable(modelo);
+        JScrollPane scroll = new JScrollPane(tabla);
+        scroll.setBounds(30, 210, 420, 130);
+        add(scroll);
+
+        cargarClientes();
+
+        // EVENTOS
+        btnGuardar.addActionListener(e -> guardar());
+        btnActualizar.addActionListener(e -> actualizar());
+        btnEliminar.addActionListener(e -> eliminar());
+
+        tabla.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int fila = tabla.getSelectedRow();
+                if (fila != -1) {
+                    txtId.setText(tabla.getValueAt(fila, 0).toString());
+                    txtNombre.setText(tabla.getValueAt(fila, 1).toString());
+                    txtTelefono.setText(tabla.getValueAt(fila, 2).toString());
+                }
+            }
+        });
+    }
+    
+    private void cargarClientes() {
+        try {
+            modelo.setRowCount(0);
+            List<Cliente> lista = dao.listar();
+            for (Cliente c : lista) {
+                modelo.addRow(new Object[]{
+                        c.getIdCliente(),
+                        c.getNombre(),
+                        c.getTelefono()
+                });
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
+
+    private void guardar() {
+        try {
+            Cliente c = new Cliente();
+            c.setNombre(txtNombre.getText());
+            c.setTelefono(txtTelefono.getText());
+
+            dao.insertar(c);
+            cargarClientes();
+            limpiar();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
+
+    private void actualizar() {
+        try {
+            Cliente c = new Cliente();
+            c.setIdCliente(Integer.parseInt(txtId.getText()));
+            c.setNombre(txtNombre.getText());
+            c.setTelefono(txtTelefono.getText());
+
+            dao.actualizar(c);
+            cargarClientes();
+            limpiar();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
+
+    private void eliminar() {
+        try {
+            int id = Integer.parseInt(txtId.getText());
+            dao.eliminar(id);
+            cargarClientes();
+            limpiar();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
+
+    private void limpiar() {
+        txtId.setText("");
+        txtNombre.setText("");
+        txtTelefono.setText("");
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // End of variables declaration//GEN-END:variables
+}
