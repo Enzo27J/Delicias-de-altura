@@ -5,6 +5,7 @@ package com.mycompany.deliciasdealtura.vista;
 import javax.swing.*;
 import java.awt.*;
 import com.mycompany.deliciasdealtura.util.Estilos;
+import com.mycompany.deliciasdealtura.util.Fondo;
 
 public class MenuPrincipal extends javax.swing.JFrame {
     
@@ -19,6 +20,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         setSize(450, 420);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setContentPane(new Fondo());
         setLayout(null);
 
         inicializarComponentes();
@@ -83,6 +85,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(204, 204, 204));
         setPreferredSize(new java.awt.Dimension(450, 420));
         setResizable(false);
         setSize(new java.awt.Dimension(450, 420));
