@@ -55,15 +55,15 @@ public class FormCliente extends javax.swing.JFrame {
         add(txtTelefono);
 
         JButton btnGuardar = new JButton("Guardar");
-        btnGuardar.setBounds(280, 80, 150, 30);
+        btnGuardar.setBounds(280, 60, 150, 30);
         add(btnGuardar);
 
         JButton btnActualizar = new JButton("Actualizar");
-        btnActualizar.setBounds(280, 120, 150, 30);
+        btnActualizar.setBounds(280, 100, 150, 30);
         add(btnActualizar);
 
         JButton btnEliminar = new JButton("Eliminar");
-        btnEliminar.setBounds(280, 160, 150, 30);
+        btnEliminar.setBounds(280, 140, 150, 30);
         add(btnEliminar);
 
         modelo = new DefaultTableModel(new String[]{"ID", "Nombre", "Teléfono"}, 0);
