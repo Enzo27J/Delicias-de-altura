@@ -17,8 +17,8 @@ JOIN
 JOIN
     Menu M ON DP.id_plato = M.id_plato
 WHERE
-    P.estado = 'En Proceso'
-;
+    P.estado = 'En Proceso';
+
 
 CREATE OR REPLACE VIEW VW_FACTURACION_DETALLADA AS
 SELECT
@@ -33,8 +33,8 @@ FROM
 JOIN
     Pedidos P ON F.id_pedido = P.id_pedido
 JOIN
-    Clientes C ON P.id_cliente = C.id_cliente
-    ;
+    Clientes C ON P.id_cliente = C.id_cliente;
+
 
 CREATE OR REPLACE VIEW VW_INVENTARIO_BAJO_ALERTA AS
 SELECT
@@ -48,8 +48,8 @@ FROM
 JOIN
     Proveedores PV ON PR.id_proveedor = PV.id_proveedor
 WHERE
-    PR.stock < 10
-    ;
+    PR.stock < 10;
+
 
 CREATE OR REPLACE VIEW VW_EMPLEADOS_BASICOS AS
 SELECT
@@ -58,8 +58,8 @@ SELECT
     puesto,
     fecha_contratacion
 FROM
-    Empleados
-    ;
+    Empleados;
+
 
 CREATE OR REPLACE VIEW VW_RELACION_PROVEEDORES AS
 SELECT
@@ -72,7 +72,8 @@ LEFT JOIN
     Productos PR ON PV.id_proveedor = PR.id_proveedor
 GROUP BY
     PV.nombre, PV.telefono;
-    
+
+
 CREATE OR REPLACE VIEW VW_PLATOS_MAS_VENDIDOS AS
 SELECT
     M.nombre AS plato,
@@ -85,7 +86,8 @@ GROUP BY
     M.nombre
 ORDER BY
     cantidad_total_vendida DESC;
-    
+
+
 CREATE OR REPLACE VIEW VW_VENTAS_POR_CLIENTE AS
 SELECT
     C.nombre AS nombre_cliente,
@@ -100,7 +102,8 @@ GROUP BY
     C.nombre, C.correo
 ORDER BY
     gasto_total DESC;
-    
+
+
 CREATE OR REPLACE VIEW VW_COMPOSICION_MENU AS
 SELECT
     M.nombre AS plato,
@@ -108,6 +111,7 @@ SELECT
     (SELECT AVG(precio_compra) FROM Productos) AS costo_promedio_insumos 
 FROM
     Menu M;
+
 
 CREATE OR REPLACE VIEW VW_HISTORIAL_COMPRAS_PRODUCTOS AS
 SELECT
@@ -121,15 +125,16 @@ JOIN
     Proveedores PV ON PR.id_proveedor = PV.id_proveedor
 ORDER BY
     PR.nombre;
-    
+
+
 CREATE OR REPLACE VIEW VW_VENTAS_DIARIAS AS
 SELECT
-    TRUNC(fecha_emision) AS dia,
+    DATE(fecha_emision) AS dia,
     COUNT(id_factura) AS numero_facturas,
     SUM(monto_total) AS ingresos_netos_dia
 FROM
     Facturas
 GROUP BY
-    TRUNC(fecha_emision)
+    DATE(fecha_emision)
 ORDER BY
     dia DESC;
